@@ -126,17 +126,17 @@
  <e en="T" n="AdmittingDiagnosisCodeSeq" t="00081084">@remove()</e>
  <e en="T" n="ManufacturerModelName" t="00081090">@keep()</e>
  <e en="T" n="RefResultsSeq" t="00081100">@remove()</e>
- <e en="T" n="RefStudySeq" t="00081110">@keep()</e>
- <e en="T" n="RefPPSSeq" t="00081111">@keep()</e>
- <e en="T" n="RefSeriesSeq" t="00081115">@keep()</e>
+ <e en="T" n="RefStudySeq" t="00081110">@process()</e>
+ <e en="T" n="RefPPSSeq" t="00081111">@process()</e>
+ <e en="T" n="RefSeriesSeq" t="00081115">@process()</e>
  <e en="T" n="RefPatientSeq" t="00081120">@remove()</e>
  <e en="T" n="RefVisitSeq" t="00081125">@remove()</e>
  <e en="T" n="RefOverlaySeq" t="00081130">@remove()</e>
  <e en="T" n="RefStereometricInstanceSeq" t="00081134">@remove()</e>
  <e en="T" n="RefWaveformSeq" t="0008113A">@remove()</e>
- <e en="T" n="RefImageSeq" t="00081140">@keep()</e>
+ <e en="T" n="RefImageSeq" t="00081140">@process()</e>
  <e en="T" n="RefCurveSeq" t="00081145">@remove()</e>
- <e en="T" n="RefInstanceSeq" t="0008114A">@keep()</e>
+ <e en="T" n="RefInstanceSeq" t="0008114A">@process()</e>
  <e en="T" n="RefRealWorldValueMappingInstanceSeq" t="0008114B">@remove()</e>
  <e en="T" n="RefSOPClassUID" t="00081150">@hashuid(@UIDROOT,this,PatientID)</e>
  <e en="T" n="RefSOPInstanceUID" t="00081155">@hashuid(@UIDROOT,this,PatientID)</e>
@@ -153,9 +153,9 @@
  <e en="T" n="WarningReason" t="00081196">@remove()</e>
  <e en="T" n="FailureReason" t="00081197">@remove()</e>
  <e en="T" n="FailedSOPSeq" t="00081198">@remove()</e>
- <e en="T" n="RefSOPSeq" t="00081199">@keep()</e>
+ <e en="T" n="RefSOPSeq" t="00081199">@process()</e>
  <e en="T" n="OtherFailuresSeq" t="0008119A">@remove()</e>
- <e en="T" n="StudiesContainingOtherRefInstancesSeq" t="00081200">@keep()</e>
+ <e en="T" n="StudiesContainingOtherRefInstancesSeq" t="00081200">@process()</e>
  <e en="T" n="RelatedSeriesSeq" t="00081250">@keep()</e>
  <e en="T" n="LossyImageCompressionRetired" t="00082110">@remove()</e>
  <e en="T" n="DerivationDescription" t="00082111">@remove()</e>
