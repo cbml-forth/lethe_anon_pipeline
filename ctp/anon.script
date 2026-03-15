@@ -9,10 +9,10 @@
  <e en="T" n="RecognitionCodeRetired" t="00080010">@remove()</e>
  <e en="T" n="InstanceCreationDate" t="00080012">@setSubstring(0,6)+"01"</e>
  <e en="T" n="InstanceCreationTime" t="00080013">@keep()</e>
- <e en="T" n="InstanceCreatorUID" t="00080014">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="InstanceCreatorUID" t="00080014">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="InstanceCoercionDateTime" t="00080015">@remove()</e>
  <e en="T" n="SOPClassUID" t="00080016">@keep()</e>
- <e en="T" n="SOPInstanceUID" t="00080018">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="SOPInstanceUID" t="00080018">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="RelatedGeneralSOPClassUID" t="0008001A">@keep()</e>
  <e en="T" n="OriginalSpecializedSOPClassUID" t="0008001B">@keep()</e>
  <e en="T" n="StudyDate" t="00080020">@modifydate(this,*,*,1)</e>
@@ -56,11 +56,11 @@
  <e en="T" n="ReferringPhysicianIdentificationSeq" t="00080096">@remove()</e>
  <e en="T" n="ConsultingPhysicianName" t="0008009C">@remove()</e>
  <e en="T" n="ConsultingPhysicianIdentificationSeq" t="0008009D">@remove()</e>
- <e en="T" n="CodeValue" t="00080100">@remove()</e>
+ <e en="T" n="CodeValue" t="00080100">@keep()</e>
  <e en="T" n="ExtendedCodeValue" t="00080101">@remove()</e>
- <e en="T" n="CodingSchemeDesignator" t="00080102">@remove()</e>
+ <e en="T" n="CodingSchemeDesignator" t="00080102">@keep()</e>
  <e en="T" n="CodingSchemeVersion" t="00080103">@remove()</e>
- <e en="T" n="CodeMeaning" t="00080104">@remove()</e>
+ <e en="T" n="CodeMeaning" t="00080104">@keep()</e>
  <e en="T" n="MappingResource" t="00080105">@remove()</e>
  <e en="T" n="ContextGroupVersion" t="00080106">@remove()</e>
  <e en="T" n="ContextGroupLocalVersion" t="00080107">@remove()</e>
@@ -108,7 +108,7 @@
  <e en="T" n="PrivateDataElementDefinitionSeq" t="00080310">@remove()</e>
  <e en="T" n="NetworkIDRetired" t="00081000">@remove()</e>
  <e en="T" n="StationName" t="00081010">@remove()</e>
- <e en="T" n="StudyDescription" t="00081030">@hashuid(@UIDROOT,StudyInstanceUID,PatientID)</e>
+ <e en="T" n="StudyDescription" t="00081030">@hashuidp(@UIDROOT,StudyInstanceUID,@SECRET_KEY)</e>
  <e en="T" n="ProcedureCodeSeq" t="00081032">@keep()</e>
  <e en="T" n="SeriesDescription" t="0008103E">@keep()</e>
  <e en="T" n="SeriesDescriptionCodeSeq" t="0008103F">@keep()</e>
@@ -138,8 +138,8 @@
  <e en="T" n="RefCurveSeq" t="00081145">@remove()</e>
  <e en="T" n="RefInstanceSeq" t="0008114A">@process()</e>
  <e en="T" n="RefRealWorldValueMappingInstanceSeq" t="0008114B">@remove()</e>
- <e en="T" n="RefSOPClassUID" t="00081150">@hashuid(@UIDROOT,this,PatientID)</e>
- <e en="T" n="RefSOPInstanceUID" t="00081155">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="RefSOPClassUID" t="00081150">@keep()</e>
+ <e en="T" n="RefSOPInstanceUID" t="00081155">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="DefinitionSourceSeq" t="00081156">@remove()</e>
  <e en="T" n="SOPClassesSupported" t="0008115A">@remove()</e>
  <e en="T" n="RefFrameNumber" t="00081160">@keep()</e>
@@ -156,10 +156,10 @@
  <e en="T" n="RefSOPSeq" t="00081199">@process()</e>
  <e en="T" n="OtherFailuresSeq" t="0008119A">@remove()</e>
  <e en="T" n="StudiesContainingOtherRefInstancesSeq" t="00081200">@process()</e>
- <e en="T" n="RelatedSeriesSeq" t="00081250">@keep()</e>
+ <e en="T" n="RelatedSeriesSeq" t="00081250">@process()</e>
  <e en="T" n="LossyImageCompressionRetired" t="00082110">@remove()</e>
  <e en="T" n="DerivationDescription" t="00082111">@remove()</e>
- <e en="T" n="SourceImageSeq" t="00082112">@keep()</e>
+ <e en="T" n="SourceImageSeq" t="00082112">@process()</e>
  <e en="T" n="StageName" t="00082120">@keep()</e>
  <e en="T" n="StageNumber" t="00082122">@keep()</e>
  <e en="T" n="NumberOfStages" t="00082124">@keep()</e>
@@ -198,15 +198,15 @@
  <e en="T" n="OnAxisBackgroundAnatomicStructureCodeSequenceTrial" t="0008225C">@remove()</e>
  <e en="T" n="AlternateRepresentationSeq" t="00083001">@remove()</e>
  <e en="T" n="AvailableTransferSyntaxUID" t="00083002">@remove()</e>
- <e en="T" n="IrradiationEventUID" t="00083010">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="IrradiationEventUID" t="00083010">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="SourceIrradiationEventSeq" t="00083011">@remove()</e>
  <e en="T" n="RadiopharmaceuticalAdministrationEventUID" t="00083012">@remove()</e>
  <e en="T" n="IdentifyingCommentsRetired" t="00084000">@remove()</e>
  <e en="T" n="FrameType" t="00089007">@remove()</e>
- <e en="T" n="RefImageEvidenceSeq" t="00089092">@remove()</e>
+ <e en="T" n="RefImageEvidenceSeq" t="00089092">@process()</e>
  <e en="T" n="RefRawDataSeq" t="00089121">@remove()</e>
  <e en="T" n="CreatorVersionUID" t="00089123">@remove()</e>
- <e en="T" n="DerivationImageSeq" t="00089124">@remove()</e>
+ <e en="T" n="DerivationImageSeq" t="00089124">@process()</e>
  <e en="T" n="SourceImageEvidenceSeq" t="00089154">@remove()</e>
  <e en="T" n="PixelPresentation" t="00089205">@remove()</e>
  <e en="T" n="VolumetricProperties" t="00089206">@remove()</e>
@@ -670,7 +670,7 @@
  <e en="T" n="PercentPhaseFieldOfView" t="00180094">@keep()</e>
  <e en="T" n="PixelBandwidth" t="00180095">@keep()</e>
  <e en="T" n="DeviceSerialNumber" t="00181000">@remove()</e>
- <e en="T" n="DeviceUID" t="00181002">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="DeviceUID" t="00181002">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="DeviceID" t="00181003">@remove()</e>
  <e en="T" n="PlateID" t="00181004">@remove()</e>
  <e en="T" n="GeneratorID" t="00181005">@remove()</e>
@@ -878,7 +878,7 @@
  <e en="T" n="DigitizingDeviceTransportDirection" t="00182020"></e>
  <e en="T" n="RotationOfScannedFilm" t="00182030"></e>
  <e en="T" n="BiopsyTargetSeq" t="00182041">@keep()</e>
- <e en="T" n="TargetUID" t="00182042">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="TargetUID" t="00182042">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="LocalizingCursorPosition" t="00182043">@keep()</e>
  <e en="T" n="CalculatedTargetPosition" t="00182044">@keep()</e>
  <e en="T" n="TargetLabel" t="00182045">@keep()</e>
@@ -1471,8 +1471,8 @@
  <e en="T" n="DiffusionBValue" t="0019100C">@keep()</e>
  <e en="T" n="DiffusionDirectionality" t="0019100D">@keep()</e>
  <e en="T" n="DiffusionGradientDirection" t="0019100E">@keep()</e>
- <e en="T" n="StudyInstanceUID" t="0020000D">@hashuid(@UIDROOT,this,PatientID)</e>
- <e en="T" n="SeriesInstanceUID" t="0020000E">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="StudyInstanceUID" t="0020000D">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
+ <e en="T" n="SeriesInstanceUID" t="0020000E">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="StudyID" t="00200010">@empty()</e>
  <e en="T" n="SeriesNumber" t="00200011">@keep()</e>
  <e en="T" n="AcquisitionNumber" t="00200012">@keep()</e>
@@ -1492,7 +1492,7 @@
  <e en="T" n="ImageOrientationRetired" t="00200035">@remove()</e>
  <e en="T" n="ImageOrientation" t="00200037">@keep()</e>
  <e en="T" n="LocationRetired" t="00200050">@remove()</e>
- <e en="T" n="FrameOfReferenceUID" t="00200052">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="FrameOfReferenceUID" t="00200052">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="Laterality" t="00200060">@keep()</e>
  <e en="T" n="ImageLaterality" t="00200062">@keep()</e>
  <e en="T" n="ImageGeometryTypeRetired" t="00200070">@remove()</e>
@@ -1501,7 +1501,7 @@
  <e en="T" n="TemporalPositionIdentifier" t="00200100">@keep()</e>
  <e en="T" n="NumberOfTemporalPositions" t="00200105">@keep()</e>
  <e en="T" n="TemporalResolution" t="00200110">@keep()</e>
- <e en="T" n="SynchronizationFrameOfReferenceUID" t="00200200">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="SynchronizationFrameOfReferenceUID" t="00200200">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="SOPInstanceUIDOfConcatenationSource" t="00200242"></e>
  <e en="T" n="SeriesInStudy" t="00201000"></e>
  <e en="T" n="AcquisitionsInSeriesRetired" t="00201001">@remove()</e>
@@ -1543,10 +1543,10 @@
  <e en="T" n="FrameAcquisitionNumber" t="00209156"></e>
  <e en="T" n="DimensionIndexValues" t="00209157"></e>
  <e en="T" n="FrameComments" t="00209158">@remove()</e>
- <e en="T" n="ConcatenationUID" t="00209161">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="ConcatenationUID" t="00209161">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="InConcatenationNumber" t="00209162"></e>
  <e en="T" n="InConcatenationTotalNumber" t="00209163"></e>
- <e en="T" n="DimensionOrganizationUID" t="00209164">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="DimensionOrganizationUID" t="00209164">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="DimensionIndexPointer" t="00209165"></e>
  <e en="T" n="FunctionalGroupPointer" t="00209167"></e>
  <e en="T" n="UnassignedSharedConvertedAttributesSeq" t="00209170"></e>
@@ -1872,7 +1872,7 @@
  <e en="T" n="PhotometricInterpretation" t="00280004">@keep()</e>
  <e en="T" n="ImageDimensionsRetired" t="00280005">@remove()</e>
  <e en="T" n="PlanarConfiguration" t="00280006">@keep()</e>
- <e en="T" n="NumberOfFrames" t="00280008"></e>
+ <e en="T" n="NumberOfFrames" t="00280008">@keep()</e>
  <e en="T" n="FrameIncrementPointer" t="00280009">@keep()</e>
  <e en="T" n="FrameDimensionPointer" t="0028000A"></e>
  <e en="T" n="Rows" t="00280010">@keep()</e>
@@ -1964,7 +1964,7 @@
  <e en="T" n="LargeRedPaletteColorLUTDescriptor" t="00281111"></e>
  <e en="T" n="LargeGreenPaletteColorLUTDescriptor" t="00281112"></e>
  <e en="T" n="LargeBluePaletteColorLUTDescriptor" t="00281113"></e>
- <e en="T" n="PaletteColorLUTUID" t="00281199">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="PaletteColorLUTUID" t="00281199">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="GrayLUTData" t="00281200"></e>
  <e en="T" n="RedPaletteColorLUTData" t="00281201">@keep()</e>
  <e en="T" n="GreenPaletteColorLUTData" t="00281202">@keep()</e>
@@ -1973,7 +1973,7 @@
  <e en="T" n="LargeRedPaletteColorLUTData" t="00281211"></e>
  <e en="T" n="LargeGreenPaletteColorLUTData" t="00281212"></e>
  <e en="T" n="LargeBluePaletteColorLUTData" t="00281213"></e>
- <e en="T" n="LargePaletteColorLUTUID" t="00281214">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="LargePaletteColorLUTUID" t="00281214">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="SegmentedRedPaletteColorLUTData" t="00281221">@keep()</e>
  <e en="T" n="SegmentedGreenPaletteColorLUTData" t="00281222">@keep()</e>
  <e en="T" n="SegmentedBluePaletteColorLUTData" t="00281223">@keep()</e>
@@ -2292,7 +2292,7 @@
  <e en="T" n="SpecimenIdentifier" t="00400551">@empty()</e>
  <e en="T" n="SpecimenDescriptionSequenceTrial" t="00400552">@remove()</e>
  <e en="T" n="SpecimenDescriptionTrial" t="00400553">@remove()</e>
- <e en="T" n="SpecimenUID" t="00400554">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="SpecimenUID" t="00400554">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="AcquisitionContextSeq" t="00400555">@remove()</e>
  <e en="T" n="AcquisitionContextDescription" t="00400556">@remove()</e>
  <e en="T" n="SpecimenDescriptionSeq" t="00400560">@empty()</e>
@@ -2445,7 +2445,7 @@
  <e en="T" n="Date" t="0040A121">@keep()</e>
  <e en="T" n="Time" t="0040A122">@keep()</e>
  <e en="T" n="PersonName" t="0040A123">@empty()</e>
- <e en="T" n="UID" t="0040A124">@hashuid(@UIDROOT,this,PatientID)</e>
+ <e en="T" n="UID" t="0040A124">@hashuidp(@UIDROOT,this,@SECRET_KEY)</e>
  <e en="T" n="ReportStatusIDTrial" t="0040A125">@remove()</e>
  <e en="T" n="TemporalRangeType" t="0040A130">@remove()</e>
  <e en="T" n="RefSamplePositions" t="0040A132">@remove()</e>
@@ -2818,21 +2818,21 @@
  <e en="T" n="HistogramBinWidth" t="00603008">@keep()</e>
  <e en="T" n="HistogramExplanation" t="00603010">@keep()</e>
  <e en="T" n="HistogramData" t="00603020">@keep()</e>
- <e en="T" n="SegmentationType" t="00620001">@remove()</e>
- <e en="T" n="SegmentSeq" t="00620002">@remove()</e>
- <e en="T" n="SegmentedPropertyCategoryCodeSeq" t="00620003">@remove()</e>
- <e en="T" n="SegmentNumber" t="00620004">@remove()</e>
- <e en="T" n="SegmentLabel" t="00620005">@remove()</e>
- <e en="T" n="SegmentDescription" t="00620006">@remove()</e>
- <e en="T" n="SegmentationAlgorithmIdentificationSeq" t="00620007">@remove()</e>
- <e en="T" n="SegmentAlgorithmType" t="00620008">@remove()</e>
- <e en="T" n="SegmentAlgorithmName" t="00620009">@remove()</e>
- <e en="T" n="SegmentIdentificationSeq" t="0062000A">@remove()</e>
+ <e en="T" n="SegmentationType" t="00620001">@keep()</e>
+ <e en="T" n="SegmentSeq" t="00620002">@process()</e>
+ <e en="T" n="SegmentedPropertyCategoryCodeSeq" t="00620003">@process()</e>
+ <e en="T" n="SegmentNumber" t="00620004">@keep()</e>
+ <e en="T" n="SegmentLabel" t="00620005">@keep()</e>
+ <e en="T" n="SegmentDescription" t="00620006">@keep()</e>
+ <e en="T" n="SegmentationAlgorithmIdentificationSeq" t="00620007">@process()</e>
+ <e en="T" n="SegmentAlgorithmType" t="00620008">@keep()</e>
+ <e en="T" n="SegmentAlgorithmName" t="00620009">@keep()</e>
+ <e en="T" n="SegmentIdentificationSeq" t="0062000A">@process()</e>
  <e en="T" n="RefSegmentNumber" t="0062000B">@keep()</e>
  <e en="T" n="RecommendedDisplayGrayscaleValue" t="0062000C">@remove()</e>
- <e en="T" n="RecommendedDisplayCIELabValue" t="0062000D">@remove()</e>
+ <e en="T" n="RecommendedDisplayCIELabValue" t="0062000D">@keep()</e>
  <e en="T" n="MaximumFractionalValue" t="0062000E">@remove()</e>
- <e en="T" n="SegmentedPropertyTypeCodeSeq" t="0062000F">@remove()</e>
+ <e en="T" n="SegmentedPropertyTypeCodeSeq" t="0062000F">@process()</e>
  <e en="T" n="SegmentationFractionalType" t="00620010">@remove()</e>
  <e en="T" n="SegmentedPropertyTypeModifierCodeSeq" t="00620011">@remove()</e>
  <e en="T" n="UsedSegmentsSeq" t="00620012">@remove()</e>
@@ -4646,8 +4646,8 @@
  <e en="T" n="SecondaryInspectionMethodSeq" t="4010107D">@remove()</e>
  <e en="T" n="PRCSToRCSOrientation" t="4010107E">@remove()</e>
  <e en="T" n="MACParametersSeq" t="4FFE0001">@remove()</e>
- <e en="T" n="SharedFunctionalGroupsSeq" t="52009229">@remove()</e>
- <e en="T" n="PerFrameFunctionalGroupsSeq" t="52009230">@remove()</e>
+ <e en="T" n="SharedFunctionalGroupsSeq" t="52009229">@process()</e>
+ <e en="T" n="PerFrameFunctionalGroupsSeq" t="52009230">@process()</e>
  <e en="T" n="WaveformSeq" t="54000100">@remove()</e>
  <e en="T" n="ChannelMinimumValue" t="54000110">@remove()</e>
  <e en="T" n="ChannelMaximumValue" t="54000112">@remove()</e>

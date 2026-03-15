@@ -57,23 +57,27 @@ def _hashUID(prefix: str, uid: str):
     return newuid
 
 
-def hash_uid_using_anon_patient_id(
+def hash_uid_using_key(
     *,
     uid: str,
     prefix: str,
-    anonymized_patient_id: str,
+    key: str,
 ) -> str:
-    """This function implements the '@hashuid(@UIDROOT,this,PatientID)' directive of CTP
+    """
+    This function implements the '@hashuid(@UIDROOT,this,PatientID)' directive of CTP
+    in case the supplied `key` is the value of the PatientID tag. Basically, it concatenates the `key` to the `uid` and then hashes
     The supplied `prefix` is the UID root to be used as a prefix for the generated UID. `uid` is the value of "this"
-    tag (e.g. the non-anonymized value of StudyInstanceUID) while `anonymized_patient_id` is the anonymized value
-    of the PatientID tag.
+    tag (e.g. the non-anonymized value of StudyInstanceUID) while `key` can be either
+    * the anonymized value of the PatientID tag in case of the typical `hashuid` directive, or
+    * the secret key param in case of our `hashuidp` directive
 
     See https://github.com/johnperry/CTP/blob/361e90f8032fbb343000f3397159ae24a001229a/source/java/org/rsna/ctp/stdstages/anonymizer/dicom/DICOMAnonymizer.java#L1359
+    and https://github.com/sgsfak/CTP/blob/4a5f70149078fea1a09cffe4fa0880ec7df1c952/source/java/org/rsna/ctp/stdstages/anonymizer/dicom/DICOMAnonymizer.java#L1359
     """
 
     if not prefix.endswith("."):
         prefix += "."
-    uid += anonymized_patient_id
+    uid += key
 
     return _hashUID(prefix, uid)
 
@@ -150,10 +154,10 @@ def _studies_hasher_factory(
     def mapper(row: list[str]) -> list[str]:
         new_patient_id = hash_patient_id(row[0], secret_key=secret_key, prefix=prefix)
 
-        hashed_study_uid = hash_uid_using_anon_patient_id(
+        hashed_study_uid = hash_uid_using_key(
             uid=row[1],
             prefix=uidroot,
-            anonymized_patient_id=new_patient_id,
+            key=secret_key,
         )
 
         return [new_patient_id, hashed_study_uid, *row[2:]]
