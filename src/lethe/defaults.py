@@ -5,4 +5,4 @@ DEFAULT_PATIENT_ID_PREFIX = "EUCAIM-"
 DEFAULT_IGNORE_CSV_PREFIX = "_"
 DEFAULT_STUDIES_METADATA_CSV = "dcm_studies_metadata.csv"
 DEFAULT_CPU_THREADS = 10
-DEFAULT_STATE_DIR = Path(__file__).parent.parent.parent / "db"  # LOL!
+DEFAULT_STATE_DIR = Path(__file__).parent.parent.parent / "db"

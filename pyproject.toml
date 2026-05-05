@@ -22,6 +22,7 @@ dependencies = [
     "tqdm>=4.67.1",
     "typer-slim>=0.19.2",
     "uuid7-standard>=1.1.0",
+    "pdf2image>=1.17.0",
 ]
 
 [dependency-groups]

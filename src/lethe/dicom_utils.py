@@ -20,6 +20,14 @@ DcmFileInfo = namedtuple(
 
 
 @dataclass(kw_only=True, eq=False)
+class StudyInfo:
+    patient_id: str
+    study_uid: str
+    study_description: str
+    study_date: str
+
+
+@dataclass(kw_only=True, eq=False)
 class SeriesInfo:
     patient_id: str
     study_uid: str
@@ -41,6 +49,32 @@ def unique_patient_ids(input_dir: Path) -> Iterable[str]:
             except Exception:
                 continue
     return seen_so_far
+
+
+def studies_information(input_dir: Path) -> Iterable[StudyInfo]:
+    seen_so_far: SortedDict[tuple[str, str], StudyInfo] = SortedDict()
+    for root, dirs, files in os.walk(os.fspath(input_dir), topdown=True):
+        for file in files:
+            file_path = os.path.join(root, file)
+            try:
+                dataset: FileDataset = dcmread(file_path, stop_before_pixels=True)
+                key = (
+                    dataset.PatientID,
+                    dataset.StudyInstanceUID,
+                )
+                if key in seen_so_far:
+                    # seen_so_far[key].image_count += 1
+                    continue
+                series_info = StudyInfo(
+                    patient_id=dataset.PatientID,
+                    study_uid=dataset.StudyInstanceUID,
+                    study_description=dataset.get("StudyDescription", ""),
+                    study_date=dataset.get("StudyDate", ""),
+                )
+                seen_so_far[key] = series_info
+            except Exception:
+                continue
+    return seen_so_far.values()
 
 
 def series_information(input_dir: Path) -> Iterable[SeriesInfo]:

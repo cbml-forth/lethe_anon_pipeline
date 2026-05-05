@@ -24,8 +24,10 @@ from .defaults import (
     DEFAULT_STUDIES_METADATA_CSV,
     DEFAULT_UIDROOT,
 )
-from .dicom_utils import series_information, unique_patient_ids
+from .dicom_utils import series_information, studies_information, unique_patient_ids
 from .hash_clinical import hash_clinical_csvs
+from .image2dicom import run_img2dicom
+from .image_qc import run_img_qc
 from .ocr_deidentify import perform_ocr
 from .output_dir import copy_and_organize
 from .pseudo import PseudonymGenerator
@@ -252,13 +254,78 @@ def series_info(
 
 
 @utils_cli.command(
-    help="Export the mappings from source patient ids to the pseunymized ones"
+    help="Extract and print the unique Study descriptions from input DICOM files"
+)
+def study_info(
+    input_dir: Annotated[
+        Path,
+        typer.Argument(
+            help="Input directory to read DICOM files from", show_default=True
+        ),
+    ] = INPUT_DIR,
+    csv: Annotated[
+        bool,
+        typer.Option("--csv", help="Print series information in CSV format"),
+    ] = False,
+):
+    series_info_list = studies_information(input_dir)
+    # UnGrouped but sorted by PatientID:
+    if csv:
+        import clevercsv
+
+        writer = clevercsv.writer(sys.stdout, "excel")
+
+        writer.writerow(
+            [
+                "PatientID",
+                "StudyUID",
+                "StudyDate",
+                "StudyDescription",
+                "Episode",
+                "ImagingTimepoint",
+            ]
+        )
+
+        for info in series_info_list:
+            writer.writerow(
+                [
+                    info.patient_id,
+                    info.study_uid,
+                    info.study_date,
+                    info.study_description,
+                    "",
+                    "",
+                ]
+            )
+        return
+
+    console = Console()
+
+    table = Table(title="Study information")
+    table.add_column("PatientID")
+    table.add_column("StudyUID")
+    table.add_column("StudyDate")
+    table.add_column("StudyDescription")
+
+    for info in series_info_list:
+        table.add_row(
+            info.patient_id,
+            info.study_uid,
+            info.study_date,
+            info.study_description,
+        )
+    console.print()
+    console.print(table)
+
+
+@utils_cli.command(
+    help="Export the mappings from source patient ids to the pseudonymized ones"
 )
 def export_lookup(
     site_id: Annotated[
         str,
         typer.Argument(
-            help="The SITE-ID provided by the EUCAIM Technical team",
+            help="The SITE-ID provided by the AFRICAI-RI Technical team",
         ),
     ],
     pseudonym_prefix: Annotated[
@@ -267,7 +334,7 @@ def export_lookup(
             help="The prefix to use for the patient's pseudonym id. You can use it as a template, passing '{site_id}' somewhere in it",
             show_default=True,
         ),
-    ] = "{site_id}_",
+    ] = "AFRICAIRI_{site_id}_",
     state_dir: Annotated[
         str,
         typer.Option(
@@ -315,7 +382,7 @@ def run(
     site_id: Annotated[
         str,
         typer.Argument(
-            help="The SITE-ID provided by the EUCAIM Technical team",
+            help="The SITE-ID provided by the AFRICAI-RI Technical team",
         ),
     ],
     input_dir: Annotated[
@@ -331,6 +398,14 @@ def run(
             show_default=True,
         ),
     ] = OUTPUT_DIR,
+    modality: Annotated[
+        str,
+        typer.Option(
+            "--modality",
+            help="Image modality: xray or ultrasound",
+            show_default=True,
+        ),
+    ] = "xray",
     dcm_deidentify: Annotated[
         bool,
         typer.Option(
@@ -413,7 +488,7 @@ def run(
             help="The prefix to use for the patient's pseudonym id. You can use it as a template, passing '{site_id}' somewhere in it",
             show_default=True,
         ),
-    ] = "{site_id}_",
+    ] = "AFRICAIRI_{site_id}_",
     state_dir: Annotated[
         str,
         typer.Option(
@@ -436,6 +511,18 @@ def run(
 
     rich.print(_header_info())
 
+    # Input/Output directories absolute paths:
+    input_dir_images = input_dir.absolute()
+    output_dir = output_dir.absolute()
+
+    # Step 0: Image Transformation + QC
+    img2dcm_output_dir = Path(tempfile.mkdtemp())
+    run_img2dicom(input_dir_images, img2dcm_output_dir, modality=modality)
+    input_dir_images = img2dcm_output_dir
+    qc_output_dir = Path(tempfile.mkdtemp())
+    run_img_qc(input_dir_images, qc_output_dir, report_dir=output_dir)
+    input_dir_images = qc_output_dir
+
     pseudonym_gen: PseudonymGenerator | None = None
     if pseudonymize:
         pepper = site_id  # We overwrite the "secret" key to be the Site ID since we are pseudonymizing
@@ -444,7 +531,7 @@ def run(
             site_id=site_id,
             pseudonym_prefix=pseudonym_prefix,
         )
-        patient_ids = unique_patient_ids(input_dir)
+        patient_ids = unique_patient_ids(input_dir_images)
         for patient_id in patient_ids:
             pseudonym_gen.assign(patient_id)
 
@@ -452,8 +539,6 @@ def run(
         logger.debug(f"Using 'secret' key: {pepper}")
 
     # Step 1: Run OCR if enabled
-    input_dir_images = input_dir.absolute()
-    output_dir = output_dir.absolute()
     if ocr or paddle_ocr:
         ocr_output_dir = Path(tempfile.mkdtemp())
         perform_ocr(input_dir_images, ocr_output_dir, paddle_ocr, verbose, threads)
