@@ -26,8 +26,6 @@ from .defaults import (
 )
 from .dicom_utils import series_information, studies_information, unique_patient_ids
 from .hash_clinical import hash_clinical_csvs
-from .image2dicom import run_img2dicom
-from .image_qc import run_img_qc
 from .ocr_deidentify import perform_ocr
 from .output_dir import copy_and_organize
 from .pseudo import PseudonymGenerator
@@ -514,14 +512,6 @@ def run(
     # Input/Output directories absolute paths:
     input_dir_images = input_dir.absolute()
     output_dir = output_dir.absolute()
-
-    # Step 0: Image Transformation + QC
-    img2dcm_output_dir = Path(tempfile.mkdtemp())
-    run_img2dicom(input_dir_images, img2dcm_output_dir, modality=modality)
-    input_dir_images = img2dcm_output_dir
-    qc_output_dir = Path(tempfile.mkdtemp())
-    run_img_qc(input_dir_images, qc_output_dir, report_dir=output_dir)
-    input_dir_images = qc_output_dir
 
     pseudonym_gen: PseudonymGenerator | None = None
     if pseudonymize:
