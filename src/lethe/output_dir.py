@@ -69,7 +69,9 @@ def _export_extracted_tags(
     output_folder: Path,
     tags_extracted: dict[tuple[str, str, str], list[tuple[str, str]]],
 ) -> None:
-    with open(output_folder / DEFAULT_SERIES_METADATA_CSV, "w") as fp_out:
+    output_csv: Path = output_folder / DEFAULT_SERIES_METADATA_CSV
+    num: int = 0
+    with open(output_csv, "w") as fp_out:
         writer = clevercsv.writer(fp_out, "excel")
         first = next(iter(tags_extracted.values()))
         writer.writerow(
@@ -85,3 +87,5 @@ def _export_extracted_tags(
             writer.writerow(
                 [patient_id, study_uid, series_uid, *[tag_val for _, tag_val in v]]
             )
+            num += 1
+    logger.info(f"Tag Extractor: Wrote {num} series metadata rows to {output_csv}")

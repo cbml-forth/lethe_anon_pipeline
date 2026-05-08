@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from functools import cache
 
+import clevercsv
 from pydicom.datadict import get_entry
 from pydicom.tag import BaseTag, Tag
 
@@ -23,15 +24,20 @@ class TagDescription:
 
 @cache
 def tags_to_select() -> list[TagDescription]:
-    with open(DEFAULT_TAG_SELECTION_CSV, "r") as f:
-        lines = f.readlines()
+    li = []
+    with open(DEFAULT_TAG_SELECTION_CSV, "r") as fp:
+        dialect = clevercsv.Sniffer().sniff(fp.read(1000))
+        if dialect is None:
+            return []
+        fp.seek(0)
+        reader = clevercsv.reader(fp, dialect)
+        lines: list[list[str]] = list(reader)
+
         if not lines:
             return []
-        header = lines[0].strip().split("\t")
+        header = lines[0]
         assert header[:2] == ["name", "tag"]
-        li = []
-        for line in lines[1:]:
-            fields = line.strip().split("\t")
+        for fields in lines[1:]:
             assert len(fields) >= 2
             name, tag = fields[:2]
 
@@ -48,4 +54,4 @@ def tags_to_select() -> list[TagDescription]:
             # get_entry returns the (VR, VM, name, is_retired, keyword) from the DICOM dictionary.
             vr, vm, _, _, _ = get_entry(tag_tup)
             li.append(TagDescription(name, Tag(tag_tup), vr, vm))
-        return li
+    return li
