@@ -7,6 +7,8 @@ from typing import Generator, Iterable
 from pydicom import FileDataset, dcmread
 from sortedcontainers import SortedDict
 
+from lethe.tag_selector import tags_to_select
+
 DcmFileInfo = namedtuple(
     "DcmFileInfo",
     [
@@ -15,6 +17,7 @@ DcmFileInfo = namedtuple(
         "study_uid",
         "series_uid",
         "instance_number",
+        "tags",  # list of (tag_name, tag_value)
     ],
 )
 
@@ -107,8 +110,33 @@ def series_information(input_dir: Path) -> Iterable[SeriesInfo]:
     return seen_so_far.values()
 
 
-def dcm_generator(input_folder: Path | str) -> Generator[DcmFileInfo, None, None]:
-    for root, dirs, files in os.walk(os.fspath(input_folder), topdown=True):
+def do_tag_extract(ds: FileDataset) -> list[tuple[str, str]]:
+    li = []
+    for tag in tags_to_select():
+        elem = ds.get(tag.tag, default=None)
+        value = ""
+        if elem:
+            # value = ",".join(
+            #     str(v)
+            #     for v in elem.to_json_dict(
+            #         bulk_data_element_handler=None, bulk_data_threshold=1024
+            #     ).get("Value", [])
+
+            value = elem.to_json_dict(
+                bulk_data_element_handler=None, bulk_data_threshold=1024
+            ).get("Value", [])
+
+            if not tag.is_multivalued():
+                value = value[0] if value else ""
+        li.append((tag.name, value))
+    return li
+
+
+def dcm_generator(
+    input_folder: Path | str,
+    extract_tags: bool = False,
+) -> Generator[DcmFileInfo, None, None]:
+    for root, _, files in os.walk(os.fspath(input_folder), topdown=True):
         for file in files:
             file_path = os.path.join(root, file)
             try:
@@ -119,6 +147,7 @@ def dcm_generator(input_folder: Path | str) -> Generator[DcmFileInfo, None, None
                     ds.StudyInstanceUID,
                     ds.SeriesInstanceUID,
                     ds.InstanceNumber,
+                    tags=do_tag_extract(ds) if extract_tags else [],
                 )
             except Exception:
                 continue

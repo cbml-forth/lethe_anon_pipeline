@@ -120,7 +120,7 @@ def _clinical_hasher_factory(
 
     Args:
         secret_key: The secret key ("pepper") to use for hashing.
-        prefix: The prefix to use for the hashed patient IDs, defaults to "AFRICAIRI-"
+        prefix: The prefix to use for the hashed patient IDs, defaults to "EUCAIM-"
                 Note that this should be aligned with the anon.script !!!
     Returns:
         the mapper function
@@ -166,7 +166,7 @@ def _studies_hasher_factory(
 
     Args:
         secret_key: The secret key ("pepper") to use for hashing.
-        prefix: The prefix to use for the hashed patient IDs, defaults to "AFRICAIRI-"
+        prefix: The prefix to use for the hashed patient IDs, defaults to "EUCAIM-"
                 Note that this should be aligned with the anon.script !!!
         pseudonym_generator: The PseudonymGenerator that keeps the lookup table for the patient ids
     Returns:

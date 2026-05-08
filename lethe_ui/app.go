@@ -176,7 +176,7 @@ func (a *App) RunContainer(params *ContainerParams) ContainerStatus {
 	}
 	if params.Pseudonymize {
 		cmd = append(cmd, "--pseudonymize")
-		cmd = append(cmd, "--pseudonym-prefix=AFRICAI-RI_{site_id}")
+		cmd = append(cmd, "--pseudonym-prefix={site_id}")
 	}
 
 	var letheCfg = readConfig()

@@ -323,7 +323,7 @@ def export_lookup(
     site_id: Annotated[
         str,
         typer.Argument(
-            help="The SITE-ID provided by the AFRICAI-RI Technical team",
+            help="The SITE-ID provided by the EUCAIM Technical team",
         ),
     ],
     pseudonym_prefix: Annotated[
@@ -332,7 +332,7 @@ def export_lookup(
             help="The prefix to use for the patient's pseudonym id. You can use it as a template, passing '{site_id}' somewhere in it",
             show_default=True,
         ),
-    ] = "AFRICAIRI_{site_id}_",
+    ] = "{site_id}_",
     state_dir: Annotated[
         str,
         typer.Option(
@@ -380,7 +380,7 @@ def run(
     site_id: Annotated[
         str,
         typer.Argument(
-            help="The SITE-ID provided by the AFRICAI-RI Technical team",
+            help="The SITE-ID provided by the EUCAIM Technical team",
         ),
     ],
     input_dir: Annotated[
@@ -466,6 +466,15 @@ def run(
             ),
         ),
     ] = True,
+    extract_tags: Annotated[
+        bool,
+        typer.Option(
+            "--tags-extract/--no-tags-extract",
+            help=(
+                "Extract tags from DICOM files and save them to a CSV file (dcm_series_metadata.csv)"
+            ),
+        ),
+    ] = True,
     verbose: Annotated[
         bool,
         typer.Option("--verbose", "-v", help="Enable verbose logging"),
@@ -486,7 +495,7 @@ def run(
             help="The prefix to use for the patient's pseudonym id. You can use it as a template, passing '{site_id}' somewhere in it",
             show_default=True,
         ),
-    ] = "AFRICAIRI_{site_id}_",
+    ] = "{site_id}_",
     state_dir: Annotated[
         str,
         typer.Option(
@@ -551,7 +560,12 @@ def run(
 
     # Step 3: Copy and organize files if hierarchical if needed
     if input_dir_images != output_dir:
-        copy_and_organize(input_dir_images, output_dir, restructure=hierarchical)
+        copy_and_organize(
+            input_dir_images,
+            output_dir,
+            restructure=hierarchical,
+            extract_tags=extract_tags,
+        )
 
     # Step 4: Hash any clinical CSVs found in the input directory:
     hash_clinical_csvs(

@@ -85,6 +85,9 @@ which should return the following:
 │                                                       structure using the anonymized UIDs as the folder │
 │                                                       names                                             │
 │                                                       [default: hierarchical]                           │
+│ --tags-extract          --no-tags-extract             Extract tags from DICOM files and save them to a  │
+│                                                       CSV file (dcm_series_metadata.csv)                │
+│                                                       [default: tags-extract]                           │
 │ --verbose           -v                                Enable verbose logging                            │
 │ --version           -V                                Print version information                         │
 │ --pseudonym-prefix                           TEXT     The prefix to use for the patient's pseudonym id. │
@@ -103,6 +106,7 @@ which should return the following:
 - Passing `--ocr` or `--paddle-ocr` will enable the Optical Character Recognition (OCR) feature for redacting "burned-in" text in the raw images. **Please note that by default no OCR will run!** The `--ocr` will run [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) and the `--paddle-ocr` will run [PaddleOCR](https://github.com/PaddlePaddle/PaddleOCR). PaddleOCR seems to be more accurate than Tesseract OCR but also slower and requires more resources.
 - `--threads` can be used to specify the number of threads that RSNA CTP and PaddleOCR (if enabled) will use and it can be used to increase the speed of the pipeline if it runs in multi-core CPU. By default, it is set to 10.
 - `--hierarchical` (default) will organize the anonymized DICOM files into a hierarchical folder structure based on the patient ID, study ID, and series ID. Each output DICOM file will also have a name consisting of digits based on an auto-numbering system, e.g. `00001.dcm`, `00002.dcm`, etc. **We suggest to always keep this option in the default `--hierarchical` mode, because it makes the output folder structure more organized but more importantly it makes sure that no sensitive information is leaked through the folder and file names.**
+- `--tags-extract` (default) will extract tags from DICOM files and save them to a CSV file called `dcm_series_metadata.csv` in the output directory. Which tags are extracted is specified in the [tag_selection.csv](./tag_selection.csv) file. **NOTE**: this option has an effect only if the `--hierarchical` mode is enabled!
 - `-v` (or `--verbose`) will enable verbose mode, which will print more detailed information about the progress of the pipeline. In particular **the `secret key` used for the anonymization of the DICOM metadata will be printed to the console**.
 - `--secret <SECRET>` allows passing the secret key to be used for the anonymization of the DICOM metadata. This allows the consistent anonymization of a cohort of patients to be performed across multiple anonymization runs. You can get a "good" secret key either by running the pipeline once with the `--verbose` option or using the `utils secret` subcommand explained a [bit further below](#utilities).
 
