@@ -555,6 +555,7 @@ def run(
             pepper=pepper,
             threads=threads,
             pseudonym_generator=pseudonym_gen,
+            verbose=verbose
         )
         input_dir_images = ctp_output_dir
 

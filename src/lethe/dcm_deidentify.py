@@ -33,6 +33,7 @@ def run_ctp(
     pepper: str,
     threads: int,
     pseudonym_generator: PseudonymGenerator | None = None,
+    verbose: bool = False
 ) -> None:
     # use the folder of the anon.script as the current working directory
     cwd = anon_script.parent
@@ -93,6 +94,9 @@ def run_ctp(
             )
 
     cmd.extend(["-da", str(anon_script)])
+
+    if verbose:
+        cmd.append("-v")
 
     logger.info("Running CTP command, output will be saved to {}".format(output_dir))
     # logger.info(" ".join(cmd))
