@@ -546,7 +546,7 @@ def run(
     # Step 2: Run RSNA CTP
     if dcm_deidentify:
         anon_script = Path(os.getcwd()) / "ctp" / "anon.script"
-        ctp_output_dir = Path(tempfile.mkdtemp()) if hierarchical else output_dir
+        ctp_output_dir = Path(tempfile.mkdtemp(dir=output_dir)) if hierarchical else output_dir
         run_ctp(
             input_dir=input_dir_images,
             output_dir=ctp_output_dir,
