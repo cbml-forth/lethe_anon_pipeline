@@ -1,4 +1,5 @@
 import subprocess
+import time
 import xml.etree.ElementTree as etree
 from collections import namedtuple
 from hashlib import sha256
@@ -98,17 +99,25 @@ def run_ctp(
     if verbose:
         cmd.append("-v")
 
+    log_file = output_dir / ("ctp-" + time.strftime("%Y%m%d-%H%M%S"))
+    stdout = log_file.with_name(log_file.name + ".out").open("w+")
+    stderr = log_file.with_name(log_file.name + ".err").open("w+")
+
     logger.info("Running CTP command, output will be saved to {}".format(output_dir))
-    # logger.info(" ".join(cmd))
-    process = subprocess.Popen(
-        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd
-    )
-    output, err = process.communicate()
-    results = _process_ctp_output(output.decode("utf-8").splitlines())
-    for line in err.decode("utf-8").splitlines():
+    logger.info("CTP standard output and error will be saved to {}".format(log_file))
+    process = subprocess.Popen(cmd, stdout=stdout, stderr=stderr, cwd=cwd)
+    retcode = process.wait()
+    stdout.flush()
+    stderr.flush()
+    stdout.seek(0)
+    stderr.seek(0)
+    results = _process_ctp_output(stdout.readlines())
+    for line in stderr.readlines():
         print(f"CTP ERROR: {line}")
     logger.info(
         "CTP command completed, elapsed time: {} seconds, files anonymized: {}".format(
             results.elapsed_time, results.processed_count
         )
     )
+    stdout.close()
+    stderr.close()
