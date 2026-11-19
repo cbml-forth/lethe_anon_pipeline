@@ -25,6 +25,7 @@ def copy_and_organize(
     in the output folder will be organized in a hierarchical structure based on the patient ID, study UID,
     and series UID.
     """
+    logger.info(f"Copying {"and organizing hierarchically" if restructure else ""} into the output folder {output_folder}")
     cnt = 0
     dirs: dict[str, int] = {}
     tags_extracted: dict[tuple[str, str, str], list[tuple[str, str]]] = {}
